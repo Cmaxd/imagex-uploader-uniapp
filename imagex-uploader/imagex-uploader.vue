@@ -49,6 +49,16 @@
 				type: String,
 				default: 'cn',
 			},
+			// userId
+			userId: {
+				type: String,
+				default: '',
+			},
+			// appId
+			appId: {
+				type: Number,
+				default: undefined,
+			},
 			// 预览图样式
 			previewStyle: {
 				type: Object,
@@ -195,6 +205,8 @@
 
 		let imagexUploader = new ImagexUploader({
 			region: _self.region,
+			appId: _self.appId,
+			userId: _self.userId,
 			imageConfig: {
 				serviceId: _self.serviceId,
 			},
