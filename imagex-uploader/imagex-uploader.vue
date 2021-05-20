@@ -49,12 +49,12 @@
 				type: String,
 				default: 'cn',
 			},
-			// userId
+			// 当前上传用户，用于辅助定位问题，非必填
 			userId: {
 				type: String,
 				default: '',
 			},
-			// appId
+			// appId为必填项，请填写在火山引擎创建的appId，用于辅助定位问题
 			appId: {
 				type: Number,
 				default: undefined,
@@ -203,45 +203,46 @@
 		let info = options.info;
 		let _self = options._self;
 
-		let imagexUploader = new ImagexUploader({
+		ImagexUploader.getInstance({
 			region: _self.region,
 			appId: _self.appId,
 			userId: _self.userId,
+			stsToken: _self.stsToken,
+			type: 'image',
 			imageConfig: {
 				serviceId: _self.serviceId,
 			},
-		});
-
-		try {
-			imagexUploader.start({
-				path: info.tempFilePath,
-				size: info.tempFile.size,
-				type: 'image',
-				stsToken: _self.stsToken,
-				success: function(data) {
-					console.log('upload success', data);
-					if (options.success) {
-						options.success(data);
-					}
-				},
-				fail: function(data) {
-					console.log('upload fail', data);
-					if (options.fail) {
-						options.fail(data);
-					}
-				},
-				progress: function(data) {
-					console.log('progress: ', data);
-					let targetIndex = _self.fileList.findIndex(file => file.path === info.tempFilePath);
-					if (targetIndex >= 0) {
-						_self.fileList[targetIndex]['uploadPercent'] = data.progress;
-						_self.$set(_self.fileList, targetIndex, _self.fileList[targetIndex]);
-					}
+		}).then(imagexUploader => {
+			if (imagexUploader) {
+				try {
+					imagexUploader.start({
+						path: info.tempFilePath,
+						size: info.tempFile.size,
+						type: 'image',
+						stsToken: _self.stsToken,
+						success: function(data) {
+							if (options.success) {
+								options.success(data);
+							}
+						},
+						fail: function(data) {
+							if (options.fail) {
+								options.fail(data);
+							}
+						},
+						progress: function(data) {
+							let targetIndex = _self.fileList.findIndex(file => file.path === info.tempFilePath);
+							if (targetIndex >= 0) {
+								_self.fileList[targetIndex]['uploadPercent'] = data.progress;
+								_self.$set(_self.fileList, targetIndex, _self.fileList[targetIndex]);
+							}
+						}
+					});
+				} catch (e) {
+					console.log('error', e)
 				}
-			});
-		} catch (e) {
-			console.log('error', e)
-		}
+			}
+		})
 	};
 </script>
 

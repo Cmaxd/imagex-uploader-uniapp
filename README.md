@@ -110,6 +110,7 @@ ImageX功能表
 | ------------ | ------------ |
 |  request 域名 | https://imagex.volcengineapi.com  |
 |  uploadFile 域名 | https://tos-lf-x.snssdk.com <br> https://tos-hl-x.snssdk.com <br> https://tos-nc2-slb2.bytecdn.cn <br> https://tos-nc2-slb1.bytecdn.cn |
+| 日志域名 | https://mcs.snssdk.com <br> https://maliva-mcs.byteoversea.com <br> https://sgali-mcs.byteoversea.com |
 
 
     <script>
@@ -118,7 +119,8 @@ ImageX功能表
                 return {
                     options: {
                         serviceId: 'your serviceId',
-                        stsToken: { /* your stsToken */ }
+                        stsToken: { /* your stsToken */ },
+                        appId: 123,
                 }
             },
             methods: {
@@ -137,7 +139,7 @@ ImageX功能表
 | serviceId | 服务ID | String | '' | 是 |
 | stsToken | sts签名 | Object | {} | 是 |
 | region | 上传区域 | 'cn'、'us'、'sg' | 'cn' | 否 |
-| appId | 应用id，用于定位日志 | Number | null | 否 |
+| appId | 应用id，用于定位日志 | Number | null | 是 |
 | userId | 用户id，用于定位某一用户日志 | String | null | 否 |
 | previewStyle | 预览图样式 | Object | { width: '162rpx', height: '162rpx' } | 否 |
 | uploadStyle | 上传样式 | Object | { width: '162rpx', height: '162rpx' } | 否 |
@@ -156,3 +158,5 @@ ImageX功能表
 访问格式：
 
 > 图片地址访问规则: http(s): / /域名/图片URI~模板配置, 其中如上的.webp 可以替换成任意图片格式，比如avif、jpeg、png，ImageX 是都是可以实时处理转换的；详情可以去ImageX研究一下；
+
+### 欢迎加我微信进行交流：mchao85
