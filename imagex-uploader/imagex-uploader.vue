@@ -202,8 +202,7 @@
 	const upload = function(options) {
 		let info = options.info;
 		let _self = options._self;
-
-		ImagexUploader.getInstance({
+		const imagexUploader = new ImagexUploader({
 			region: _self.region,
 			appId: _self.appId,
 			userId: _self.userId,
@@ -212,37 +211,37 @@
 			imageConfig: {
 				serviceId: _self.serviceId,
 			},
-		}).then(imagexUploader => {
-			if (imagexUploader) {
-				try {
-					imagexUploader.start({
-						path: info.tempFilePath,
-						size: info.tempFile.size,
-						type: 'image',
-						stsToken: _self.stsToken,
-						success: function(data) {
-							if (options.success) {
-								options.success(data);
-							}
-						},
-						fail: function(data) {
-							if (options.fail) {
-								options.fail(data);
-							}
-						},
-						progress: function(data) {
-							let targetIndex = _self.fileList.findIndex(file => file.path === info.tempFilePath);
-							if (targetIndex >= 0) {
-								_self.fileList[targetIndex]['uploadPercent'] = data.progress;
-								_self.$set(_self.fileList, targetIndex, _self.fileList[targetIndex]);
-							}
+		});
+
+		if (imagexUploader) {
+			try {
+				imagexUploader.start({
+					path: info.tempFilePath,
+					size: info.tempFile.size,
+					type: 'image',
+					stsToken: _self.stsToken,
+					success: function(data) {
+						if (options.success) {
+							options.success(data);
 						}
-					});
-				} catch (e) {
-					console.log('error', e)
-				}
+					},
+					fail: function(data) {
+						if (options.fail) {
+							options.fail(data);
+						}
+					},
+					progress: function(data) {
+						let targetIndex = _self.fileList.findIndex(file => file.path === info.tempFilePath);
+						if (targetIndex >= 0) {
+							_self.fileList[targetIndex]['uploadPercent'] = data.progress;
+							_self.$set(_self.fileList, targetIndex, _self.fileList[targetIndex]);
+						}
+					}
+				});
+			} catch (e) {
+				console.log('error', e)
 			}
-		})
+		}
 	};
 </script>
 
